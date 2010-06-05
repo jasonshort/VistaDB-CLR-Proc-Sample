@@ -1,0 +1,59 @@
+﻿--------------------------------------------------------------
+-- CLR Proc Sample for VistaDB 4.0
+-- JUNE 2010
+--------------------------------------------------------------
+-- This is part of a larger sample and documentation, see the
+-- solution for the readme on how the parts work together
+--------------------------------------------------------------
+-- http://www.vistadb.net/tutorials
+--------------------------------------------------------------
+
+PRINT '-------------------------------------------------------';
+PRINT 'CALL EXAMPLES';
+PRINT 'Make sure the assembly is loaded first';
+PRINT '-------------------------------------------------------';
+
+IF ( SELECT COUNT(objectID) FROM [database schema] WHERE NAME = 'MyClrProcExportAssembly' AND TYPEID = 12 ) > 0 
+	PRINT '[OK] MyClrProcExportAssembly already exists in database - we can attempt to call the methods';
+ELSE
+	RAISERROR( 'Assembly does not appear to be loaded', 1, 1 );  -- Bail out if we don't find the assembly
+
+-- Test Function 1 - ExportSchemaAndData - File will be called test.xml on disk
+
+-- Call the function and the return value will be returned from the select
+select ExportSchemaAndData( 'test2' );
+
+-- Call the function without getting the return value can also be done like this
+-- ExportSchemaAndData( 'test2' );
+
+-- Call the Function using a local variable for the result
+DECLARE @exportok AS BIT;
+SELECT @exportok = ExportSchemaAndData( 'test' );
+IF ( @exportok = 1 )
+	PRINT 'Data Exported OK';  -- See the LOG output pane for the PRINT output
+ELSE
+	RAISERROR( 'Data Export Failed', 1, 1 );
+
+-- Test GetVersionFunction.  It will return the database version using ado.net internally
+-- Will display the version in a column named VersionString
+select GetVersionFunction() as VersionString;
+
+-- THINGS NOT TO DO:
+-- EXEC on a function will not display anything!
+EXEC GetVersionFunction();
+-- Calling direct will not display anything!
+--GetVersionFunction();
+
+-- Test Procedure version of GetVersion
+-- You have to declare the variable for the output and then exec the procedure
+-- then you can select the variable to display it
+DECLARE @versionout AS NVARCHAR(4000);
+EXEC GetVersionProcedure( @versionout );
+SELECT @versionout as VersionString;
+PRINT 'Version returned: ' + @versionout;
+
+-- THINGS NOT TO DO:
+-- SELECT on a procedure will return the number of rows affected (0 in this case)
+-- this is usually NOT the desired behavior.
+SELECT GetVersionProcedure(@versionout);
+SELECT @versionout as VersionString;  -- this still works, but you already returned a result set from the select above

@@ -1,0 +1,61 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="Table1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="TableName" type="xs:string" minOccurs="0" />
+                <xs:element name="IsFilter" type="xs:string" minOccurs="0" />
+                <xs:element name="Filter" type="xs:string" minOccurs="0" />
+                <xs:element name="IsScope" type="xs:string" minOccurs="0" />
+                <xs:element name="ScopeLow" type="xs:string" minOccurs="0" />
+                <xs:element name="ScopeHigh" type="xs:string" minOccurs="0" />
+                <xs:element name="IndexName" type="xs:string" minOccurs="0" />
+                <xs:element name="FieldsOrder" type="xs:string" minOccurs="0" />
+                <xs:element name="IsFTS" type="xs:string" minOccurs="0" />
+                <xs:element name="ftsField" type="xs:string" minOccurs="0" />
+                <xs:element name="ftsPattern" type="xs:string" minOccurs="0" />
+                <xs:element name="recNo" type="xs:string" minOccurs="0" />
+                <xs:element name="findExpression" type="xs:string" minOccurs="0" />
+                <xs:element name="evalTest" type="xs:string" minOccurs="0" />
+                <xs:element name="defaultSettings" type="xs:string" minOccurs="0" />
+                <xs:element name="selectedTab" type="xs:string" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="Table2">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="QueryColumn" type="xs:string" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <Table1>
+    <TableName>EMPLOYEES</TableName>
+    <IsFilter>False</IsFilter>
+    <Filter />
+    <IsScope>False</IsScope>
+    <ScopeLow />
+    <ScopeHigh />
+    <IndexName>&lt;None&gt;</IndexName>
+    <FieldsOrder>0</FieldsOrder>
+    <IsFTS>False</IsFTS>
+    <ftsField />
+    <ftsPattern />
+    <recNo>6</recNo>
+    <findExpression />
+    <evalTest />
+    <defaultSettings>0</defaultSettings>
+    <selectedTab>0</selectedTab>
+  </Table1>
+  <Table2>
+    <QueryColumn>SELECT CLRProcSample_CLRProcedures_GetDatabaseVersion()</QueryColumn>
+  </Table2>
+</NewDataSet>

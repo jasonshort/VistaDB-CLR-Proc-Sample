@@ -1,0 +1,56 @@
+﻿--------------------------------------------------------------
+-- CLR Proc Sample for VistaDB 4.0
+-- JUNE 2010
+--------------------------------------------------------------
+-- This is part of a larger sample and documentation, see the
+-- solution for the readme on how the parts work together
+--------------------------------------------------------------
+-- http://www.vistadb.net/tutorials
+--------------------------------------------------------------
+
+PRINT '-------------------------------------------------------';
+PRINT 'DROP FUNCTIONS';
+PRINT '-------------------------------------------------------';
+
+-- DROP FUNCTIONS
+-- NOTE: You MUST use the name they were registered with, not their class method names
+BEGIN TRY
+	DROP FUNCTION ExportSchemaAndData;
+	PRINT '[OK] Dropped ExportSchemaAndData';
+END TRY
+BEGIN CATCH
+	PRINT '[ERROR] Unable to drop ExportSchemaAndData';
+END CATCH
+
+BEGIN TRY
+	DROP FUNCTION GetVersionFunction;
+	PRINT '[OK] Dropped GetVersionFunction';
+END TRY
+BEGIN CATCH
+	PRINT '[ERROR] Unable to drop GetVersionFunction';
+END CATCH
+
+BEGIN TRY
+	DROP FUNCTION GetVersionProcedure;
+	PRINT '[OK] Dropped GetVersionProcedure';
+END TRY
+BEGIN CATCH
+	PRINT '[ERROR] Unable to drop GetVersionProcedure';
+END CATCH
+
+
+PRINT '-------------------------------------------------------';
+PRINT 'DROP ASSEMBLY';
+PRINT '-------------------------------------------------------';
+
+-- DROP THE ASSEMBLY
+BEGIN TRY
+	DROP ASSEMBLY MyClrProcExportAssembly;
+	PRINT '[OK] Dropped the assembly from the database.';
+END TRY
+BEGIN CATCH
+	PRINT '[ERROR] Unable to drop the assembly.  Make sure ALL functions are removed that reference the assembly first!';
+END CATCH
+PRINT '-------------------------------------------------------';
+PRINT 'DONE';
+PRINT '-------------------------------------------------------';

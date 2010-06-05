@@ -1,0 +1,110 @@
+﻿--------------------------------------------------------------
+-- CLR Proc Sample for VistaDB 4.0
+-- JUNE 2010
+--------------------------------------------------------------
+-- This is part of a larger sample and documentation, see the
+-- solution for the readme on how the parts work together
+--------------------------------------------------------------
+-- http://www.vistadb.net/tutorials
+--------------------------------------------------------------
+
+
+DECLARE @error bit;
+set @error = 0;
+PRINT '-------------------------------------------------------';
+PRINT 'Example sql functions for adding clr assembly and procs';
+PRINT '-------------------------------------------------------';
+-- Add the assembly to the database
+-- This loads the DLL into the database (the local dll is no longer required)
+-- No dependencies are loaded, and must be present on the runtime machine in order to work
+-- NOTE: The AssemblyName is from the Application Assembly Name (project properties)
+BEGIN TRY
+	CREATE ASSEMBLY [MyClrProcExportAssembly] FROM 'MyClrProcExportAssembly.dll';
+	PRINT '[OK] Added the assembly';
+END TRY
+BEGIN CATCH
+	PRINT '[WARNING] Unable to add the assembly. We will try to update instead.';
+	-- If the assembly is already present you can call ALTER ASSEMBLY to update it with the current
+	-- assembly from disk.  This works even if the assembly has bound functions (no need to drop them all first)
+	set @error = 1;
+END CATCH
+
+if (@error = 1 )
+BEGIN TRY
+	ALTER ASSEMBLY [MyClrProcExportAssembly] FROM 'MyClrProcExportAssembly.dll';
+	PRINT '[OK] Updated the assembly from disk';
+END TRY
+BEGIN CATCH
+	PRINT '[ERROR] Unable to UPDATE assembly. Make sure it is present on disk.';
+	RETURN;
+END CATCH
+
+PRINT '-------------------------------------------------------';
+PRINT 'CREATE FUNCTIONS';
+PRINT '-------------------------------------------------------';
+	
+
+-- Add the first function.  We want a friendly name ExportSchemaAndData rather than the full namespace name.
+-- Note the way we have to specify the Assembly.Namespace.Class.Function
+-- Even if the assembly and namespaces are the same you MUST specify each
+IF ( SELECT COUNT(objectid) FROM [database schema] WHERE NAME = 'ExportSchemaAndData' AND TYPEID = 11 ) > 0 
+	PRINT '[OK] ExportSchemaAndData already exists in database';
+ELSE
+BEGIN
+	BEGIN TRY
+		-- NOTE how the NVARCHAR(4000) is used for a string.  The max length of a string is 8000 bytes, but
+		-- all strings in .Net are unicode, so we need to use NVARCHAR and that takes 2 bytes per character
+		CREATE FUNCTION ExportSchemaAndData ( @value NVARCHAR(4000) ) RETURNS BIT
+		AS EXTERNAL NAME MyClrProcExportAssembly.MyClrProcExportNamespace.CLRProcedures.ExportSchemaAndData;
+		PRINT '[OK] Added ExportSchemaAndData proc';
+	END TRY
+	BEGIN CATCH
+		PRINT '[ERROR] Unable to register the ExportSchemaAndData function';
+	END CATCH
+END
+
+-- Add the second function with a nice short name of GetVersionFunction
+-- If you were to add it using the Data Builder UI your name would be CLRProcedures_GetDatabaseVersionFunction.
+-- The default is to use the assemblies default namespace, but the class_method is the name of the function.
+-- By specifying a name of the function here we are overriding the default.  It does not have
+-- to match the actual fuction name (The actual function is GetDatabaseVersionFunction, we used just GetVersionFunction).
+-- This is a function because we are using the return value to signify the value (see help for more info)
+IF ( SELECT COUNT(objectid) FROM [database schema] WHERE NAME = 'GetVersionFunction' AND TYPEID = 11 ) > 0 
+	PRINT '[OK] GetVersionFunction already exists in database';
+ELSE
+BEGIN
+	BEGIN TRY
+		CREATE FUNCTION GetVersionFunction ( ) RETURNS NVARCHAR(500)
+		AS EXTERNAL NAME MyClrProcExportAssembly.MyClrProcExportNamespace.CLRProcedures.GetDatabaseVersionFunction;
+		PRINT '[OK] Added GetVersionFunction function';
+	END TRY
+	BEGIN CATCH
+		PRINT '[ERROR] Unable to register the GetVersionFunction';
+	END CATCH
+END
+
+
+-- Add GetDatabaseVersionProcedure
+-- If you were to add it using the Data Builder UI your name would be CLRProcedures_GetDatabaseVersionProcedure.
+-- The default is to use the assemblies default namespace, but the class_method is the name of the procedure.
+-- By specifying a name here we are overriding the default.  It does not have
+-- to match the actual fuction name (The actual function is GetDatabaseVersionProcedure, we used just GetVersionProcedure).
+IF ( SELECT COUNT(objectid) FROM [database schema] WHERE NAME = 'GetVersionProcedure' AND TYPEID = 11 ) > 0 
+	PRINT '[OK] GetVersionProcedure already exists in database';
+ELSE
+BEGIN
+	BEGIN TRY
+		CREATE PROCEDURE GetVersionProcedure( @versionString NVARCHAR(4000) OUTPUT ) 
+		AS EXTERNAL NAME MyClrProcExportAssembly.MyClrProcExportNamespace.CLRProcedures.GetDatabaseVersionProcedure;
+		PRINT '[OK] Added GetDatabaseVersionProcedure';
+	END TRY
+	BEGIN CATCH
+		PRINT '[ERROR] Unable to register the GetDatabaseVersionProcedure';
+	END CATCH
+END
+
+
+PRINT '-------------------------------------------------------';
+PRINT 'DONE';
+PRINT '-------------------------------------------------------';
+
