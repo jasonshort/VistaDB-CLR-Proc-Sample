@@ -57,3 +57,4 @@ PRINT 'Version returned: ' + @versionout;
 -- this is usually NOT the desired behavior.
 SELECT GetVersionProcedure(@versionout);
 SELECT @versionout as VersionString;  -- this still works, but you already returned a result set from the select above
+

@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * Copyright (C) 2010 VistaDB Software, Inc.
+ * CLR Proc Sample for VistaDB 4
+ * http://www.vistadb.net/tutorials
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using VistaDB.Compatibility.SqlServer;

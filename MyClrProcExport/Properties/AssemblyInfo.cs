@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("MyClrProcExport")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("VistaDB")]
+[assembly: AssemblyCompany("VistaDB Software")]
 [assembly: AssemblyProduct("MyClrProcExport")]
-[assembly: AssemblyCopyright("Copyright © 2010 VistaDB")]
+[assembly: AssemblyCopyright("Copyright © 2010 VistaDB Software")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
